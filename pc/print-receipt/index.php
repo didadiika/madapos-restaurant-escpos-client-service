@@ -104,7 +104,7 @@ $jumlah_print = $_POST['jumlah_print'];
                     {
                         $printer -> setJustification(Printer::JUSTIFY_CENTER);
                     }
-                    $logo = EscposImage::load($images_path.'/'.$data->store->photo);
+                    $logo = EscposImage::load($data->print_setting->local_image_link);
                     if($center == 'On')
                     {
                     $printer -> setJustification(Printer::JUSTIFY_CENTER);
