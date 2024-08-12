@@ -167,8 +167,8 @@ $jumlah_print = $_POST['jumlah_print'];
                     $no++;
                         $nama_produk = ucwords(strtolower($content->name));#12
                         $qty = $content->qty;#1
+                        $note = $content->note;
                         $harga = uang($content->price);#6
-                        $opr = " x ";#3
                         $sub_total = uang($total[] = $content->qty*$content->price);#6
 
                         $panjang_tengah = strlen($harga);
@@ -178,6 +178,9 @@ $jumlah_print = $_POST['jumlah_print'];
                         
                         $printer -> setJustification(Printer::JUSTIFY_LEFT);
                         $printer -> text(str_repeat(' ',$spasi_max_qty - strlen($qty)).$qty.str_repeat(' ',$spasi_between_qty_items).$nama_produk."\n");
+                        if($note != "" && $note != null){
+                            $printer -> text("     **".$note."\n");
+                        }
                         $printer -> text(str_repeat(' ', $sisa_batas_kiri).$harga.str_repeat(' ', $sisa_batas_kanan).$sub_total."\n");
                         }
                         $total = array_sum($total);
