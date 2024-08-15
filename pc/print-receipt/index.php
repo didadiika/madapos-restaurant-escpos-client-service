@@ -162,25 +162,19 @@ $jumlah_print = $_POST['jumlah_print'];
                     $printer -> text(str_repeat('-', $lebar_pixel)."\n");
         
                     $no = 0;
-                    /* Setting Qty */
                     $max_qty = 3;
                     $space_between_qty_item = 1;
-
-                    /* Setting Item */
                     $max_item = $lebar_pixel - $max_qty - $space_between_qty_item;
-
-                    /* Setting Price */
                     $max_price = 10;
-                    $space_between_price_sub_total = 2;
-
-                    /* Setting Sub Total */
                     $max_sub_total = 10;
-
+                        
                     $printer -> setJustification(Printer::JUSTIFY_LEFT);
                     if($receipt->paper == "80mm"){
-                        $printer -> text("Qty".str_repeat(' ',$space_between_qty_item)."Item".str_repeat(' ',23)."Price".str_repeat(' ',3)."Sub Total\n");
+
+                        
+                        $printer -> text("Qty".str_repeat(' ',$space_between_qty_item)."Item".str_repeat(' ',13)."Price".str_repeat(' ',13)."Sub Total\n");
                     } else if($receipt->paper == "58mm"){
-                        $printer -> text("Qty".str_repeat(' ',$space_between_qty_item)."Item".str_repeat(' ',7)."Price".str_repeat(' ',3)."Sub Total\n");
+                        $printer -> text("Qty".str_repeat(' ',$space_between_qty_item)."Item".str_repeat(' ',5)."Price".str_repeat(' ',5)."Sub Total\n");
                     }
                     $printer -> text(str_repeat('-', $lebar_pixel)."\n");
                     foreach($receipt->contents as $content){
@@ -191,8 +185,9 @@ $jumlah_print = $_POST['jumlah_print'];
                         $price = uang($content->price);#6
                         $sub_total = uang($total[] = $content->qty*$content->price);#6
 
-                        $space_before_price = 26;
-                        if($receipt->paper == "58mm") {  $space_before_price = 10; }
+                        $space_before_price = 16;
+                        $space_between_price_sub_total = 12;
+                        if($receipt->paper == "58mm") {  $space_before_price = 8; $space_between_price_sub_total = 4;}
                         
                         $printer -> setJustification(Printer::JUSTIFY_LEFT);
                         $printer -> text(str_repeat(' ',$max_qty - strlen($qty)).$qty.str_repeat(' ',$space_between_qty_item).$item."\n");
