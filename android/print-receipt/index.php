@@ -21,6 +21,9 @@ $json = $_POST['json'];
 $data = json_decode($json);
 $jumlah_print = $_POST['jumlah_print'];
 
+$path_parts = pathinfo($data->print_setting->local_image_link);
+$extension = $path_parts['extension'];
+$photo_name = $path_parts['filename'];
         
 
         /**JIKA ADA BILLS**/
@@ -100,7 +103,7 @@ $jumlah_print = $_POST['jumlah_print'];
                     {
                         $printer -> setJustification(Printer::JUSTIFY_CENTER);
                     }
-                    $logo = EscposImage::load($images_path.'/'.$data->store->photo);
+                    $logo = EscposImage::load($images_path.'/'.$photo_name.".".$extension);
                     if($center == 'On')
                     {
                     $printer -> setJustification(Printer::JUSTIFY_CENTER);
