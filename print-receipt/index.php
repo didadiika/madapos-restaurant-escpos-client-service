@@ -1,7 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *'); 
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 use Mike42\Escpos\ImagickEscposImage;#Butuh Ekstensi Imagick
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
@@ -12,16 +12,26 @@ use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
 
 date_default_timezone_set("Asia/Jakarta");
-require __DIR__ . '/../../helper/Tanggal_helper.php';
-require __DIR__ . '/../../helper/Uang_helper.php';
-require __DIR__ . '/../config/app.php';
+require __DIR__ . '/../helper/Tanggal_helper.php';
+require __DIR__ . '/../helper/Uang_helper.php';
+require __DIR__ . '/../config.php';
 
 
 $json = $_POST['json'];
 $data = json_decode($json);
 $jumlah_print = $_POST['jumlah_print'];
 
-        
+
+#----------------------------------IMAGE SETTING FIRST-------------------------------------#
+$logo_image = 'default.png';
+if($device == 'windows')
+{
+    $image_directory = $data->print_setting->windows_images_directory;
+} else if($device == 'android'){
+    $image_directory = $data->print_setting->android_images_directory;
+}
+#----------------------------------IMAGE SETTING FIRST-------------------------------------#
+
 
         /**JIKA ADA BILLS**/
         if($data->receipts){
@@ -100,7 +110,7 @@ $jumlah_print = $_POST['jumlah_print'];
                     {
                         $printer -> setJustification(Printer::JUSTIFY_CENTER);
                     }
-                    $logo = EscposImage::load($data->print_setting->local_image_link);
+                    $logo = EscposImage::load($image_directory.'/default.png');
                     if($center == 'On')
                     {
                     $printer -> setJustification(Printer::JUSTIFY_CENTER);
@@ -247,7 +257,7 @@ $jumlah_print = $_POST['jumlah_print'];
                 $printer -> setJustification(Printer::JUSTIFY_CENTER);
             }
             $printer -> text("TERIMA KASIH \n");
-            $mada_footer = EscposImage::load($images_path.'/'.$data->app_logo);
+            $mada_footer = EscposImage::load($image_directory.'/'.$data->app_logo);
             $printer->bitImage($mada_footer);
             if($receipt->space_footer > 0){$printer -> feed($receipt->space_footer); }
             if($receipt->cutter == "On")
