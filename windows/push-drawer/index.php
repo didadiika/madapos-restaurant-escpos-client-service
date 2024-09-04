@@ -1,7 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *'); 
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 use Mike42\Escpos\ImagickEscposImage;#Butuh Ekstensi Imagick
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;

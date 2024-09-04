@@ -1,7 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *'); 
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 use Mike42\Escpos\ImagickEscposImage;#Butuh Ekstensi Imagick
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
@@ -12,9 +12,9 @@ use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
 
 date_default_timezone_set("Asia/Jakarta");
-require __DIR__ . '/../helper/Tanggal_helper.php';
-require __DIR__ . '/../helper/Uang_helper.php';
-require __DIR__ . '/../config.php';
+require __DIR__ . '/../../helper/Tanggal_helper.php';
+require __DIR__ . '/../../helper/Uang_helper.php';
+require __DIR__ . '/../../config.php';
 
 
 $json = $_POST['json'];
@@ -24,10 +24,14 @@ $jumlah_print = $_POST['jumlah_print'];
 
 #----------------------------------IMAGE SETTING FIRST-------------------------------------#
 $logo_image = 'default.png';
-if($device == 'windows')
+$urlArray = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$segments = explode('/', $urlArray);
+$numSegments = count($segments); 
+$environment = $segments[$numSegments - 3];
+if($environment == 'windows')
 {
     $image_directory = $data->print_setting->windows_images_directory;
-} else if($device == 'android'){
+} else if($environment == 'android'){
     $image_directory = $data->print_setting->android_images_directory;
 }
 #----------------------------------IMAGE SETTING FIRST-------------------------------------#
