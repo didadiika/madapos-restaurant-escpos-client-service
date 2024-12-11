@@ -34,8 +34,6 @@ if($environment == 'windows')
 }
 #----------------------------------IMAGE SETTING FIRST-------------------------------------#
 
-
-
 if(count($data->printers) > 0){
 
     foreach($data->printers as $printer){
