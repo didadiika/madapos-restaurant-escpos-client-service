@@ -66,8 +66,9 @@ if(count($data->printers) > 0){
                     #----------------------------------RECEIPT-------------------------------------#
                     if($job->job == 'Receipt' && $data->waiting->receipt == true){
                         
-
-                        
+                        if($data->waiting->push_drawer == true && ($printer->printer_cash_drawer == 1 || $printer->printer_cash_drawer == true)){
+                            $print->pulse(0, 100, 100);
+                        }
 
                         if($center == 'On')
                         {
