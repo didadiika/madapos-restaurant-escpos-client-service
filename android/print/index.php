@@ -80,10 +80,12 @@ if(count($data->printers) > 0){
                             $print->selectPrintMode(Printer::MODE_FONT_A);
                             $print->setEmphasis(true);
                             $print->text($data->store->header_bill."\n");
+                            $print->setEmphasis(false);
                         } else {
                             $print->selectPrintMode(Printer::MODE_FONT_B);
                             $print->setEmphasis(true);
-                            $print->text($data->store->header_bill."\n");
+                            $print -> setTextSize(2, 2);
+                            $print->text(substr($data->store->header_bill,0,($max_width/2))."\n");
                             $print->selectPrintMode(Printer::MODE_FONT_A);
                         }
                         
@@ -204,8 +206,10 @@ if(count($data->printers) > 0){
                             $print -> setJustification(Printer::JUSTIFY_CENTER);
                         }
                         $print -> text("TERIMA KASIH \n");
-                        $mada_footer = EscposImage::load($image_directory.'/'.$data->app_logo);
-                        $print->bitImage($mada_footer);
+                        if($data->print_setting->show_powered_by == true){
+                            $mada_footer = EscposImage::load($image_directory.'/'.$data->app_logo);
+                            $print->bitImage($mada_footer);
+                        }
                         if($printer->printer_footer_space > 0){$print -> feed($printer->printer_footer_space); }
                         $print->cut();#Memotong kertas
                         
@@ -326,8 +330,10 @@ if(count($data->printers) > 0){
                         {
                             $print -> setJustification(Printer::JUSTIFY_CENTER);
                         }
-                        $mada_footer = EscposImage::load($image_directory.'/'.$data->app_logo);
-                        $print->bitImage($mada_footer);
+                        if($data->print_setting->show_powered_by == true){
+                            $mada_footer = EscposImage::load($image_directory.'/'.$data->app_logo);
+                            $print->bitImage($mada_footer);
+                        }
                         if($printer->printer_footer_space > 0){$printer -> feed($printer->printer_footer_space); }
                         $print->cut();#Memotong kertas
                         
@@ -428,8 +434,10 @@ if(count($data->printers) > 0){
                                     }
                                     $print -> text("TERIMA KASIH \n");
                                     
-                                    $mada_footer = EscposImage::load($image_directory.'/'.$data->app_logo);
-                                    $print->bitImage($mada_footer);
+                                    if($data->print_setting->show_powered_by == true){
+                                        $mada_footer = EscposImage::load($image_directory.'/'.$data->app_logo);
+                                        $print->bitImage($mada_footer);
+                                    }
                                     if($printer->printer_footer_space > 0){$print -> feed($printer->printer_footer_space); }
                                     $print->cut();#Memotong kertas
                                     
