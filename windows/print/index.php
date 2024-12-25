@@ -207,8 +207,8 @@ if(count($data->printers) > 0){
                         }
                         $print -> text("TERIMA KASIH \n");
                         if($data->print_setting->show_powered_by == true){
-                            $mada_footer = EscposImage::load($image_directory.'/'.$data->app_logo);
-                            $print->bitImage($mada_footer);
+                            $print->setEmphasis(true);
+                            $print->text("Powered by MadaPOS\n");
                         }
                         if($printer->printer_footer_space > 0){$print -> feed($printer->printer_footer_space); }
                         $print->cut();#Memotong kertas
@@ -331,8 +331,8 @@ if(count($data->printers) > 0){
                             $print -> setJustification(Printer::JUSTIFY_CENTER);
                         }
                         if($data->print_setting->show_powered_by == true){
-                            $mada_footer = EscposImage::load($image_directory.'/'.$data->app_logo);
-                            $print->bitImage($mada_footer);
+                            $print->setEmphasis(true);
+                            $print->text("Powered by MadaPOS\n");
                         }
                         if($printer->printer_footer_space > 0){$printer -> feed($printer->printer_footer_space); }
                         $print->cut();#Memotong kertas
@@ -435,8 +435,8 @@ if(count($data->printers) > 0){
                                     $print -> text("TERIMA KASIH \n");
                                     
                                     if($data->print_setting->show_powered_by == true){
-                                        $mada_footer = EscposImage::load($image_directory.'/'.$data->app_logo);
-                                        $print->bitImage($mada_footer);
+                                        $print->setEmphasis(true);
+                                        $print->text("Powered by MadaPOS\n");
                                     }
                                     if($printer->printer_footer_space > 0){$print -> feed($printer->printer_footer_space); }
                                     $print->cut();#Memotong kertas
