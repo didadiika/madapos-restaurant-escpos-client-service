@@ -74,11 +74,19 @@ if(count($data->printers) > 0){
                         {
                             $print -> setJustification(Printer::JUSTIFY_CENTER);
                         }
-                        $logo = EscposImage::load($image_directory.'/default.png');
-                        $print->bitImage($logo);
-                        $print->selectPrintMode(Printer::MODE_FONT_A);
-                        $print->setEmphasis(true);
-                        $print->text($data->store->header_bill."\n");
+                        if($job->print_with_logo == true){
+                            $logo = EscposImage::load($image_directory.'/default.png');
+                            $print->bitImage($logo);
+                            $print->selectPrintMode(Printer::MODE_FONT_A);
+                            $print->setEmphasis(true);
+                            $print->text($data->store->header_bill."\n");
+                        } else {
+                            $print->selectPrintMode(Printer::MODE_FONT_B);
+                            $print->setEmphasis(true);
+                            $print->text($data->store->header_bill."\n");
+                            $print->selectPrintMode(Printer::MODE_FONT_A);
+                        }
+                        
                         $print->text($data->store->address."\n");
                         $print->text($data->store->city."\n");
                         $print->text($data->store->phone."\n");
