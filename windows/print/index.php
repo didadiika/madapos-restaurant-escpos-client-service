@@ -432,7 +432,6 @@ if(count($data->printers) > 0){
                                     {
                                         $print -> setJustification(Printer::JUSTIFY_CENTER);
                                     }
-                                    $print -> text("TERIMA KASIH \n");
                                     
                                     if($data->print_setting->show_powered_by == true){
                                         $print->setEmphasis(true);
