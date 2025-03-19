@@ -19,12 +19,26 @@ require __DIR__ . '/../../config.php';
 $json = $_POST['json'];
 $data = json_decode($json);
 
+#----------------------------------IMAGE SETTING FIRST-------------------------------------#
+$logo_image = 'default.png';
+$urlArray = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$segments = explode('/', $urlArray);
+$numSegments = count($segments); 
+$environment = $segments[$numSegments - 3];
+if($environment == 'windows')
+{
+    $image_directory = $data->print_setting->windows_images_directory;
+} else if($environment == 'android'){
+    $image_directory = $data->print_setting->android_images_directory;
+}
+#----------------------------------IMAGE SETTING FIRST-------------------------------------#
+
 if(count($data->printers) > 0){
 
     foreach($data->printers as $printer){
     
         $connector = ($printer->printer_conn == 'USB') ? new WindowsPrintConnector($printer->printer_address) : new NetworkPrintConnector($printer->printer_address) ;
-        if($connector){ #If Connector
+        if($connector && $printer->printer_conn != 'USB'){ #If Connector
             $print = new Printer($connector);#Open Koneksi Printer
             if(count($printer->jobs) > 0){
 

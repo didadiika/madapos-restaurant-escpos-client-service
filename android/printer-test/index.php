@@ -16,12 +16,26 @@ use Mike42\Escpos\EscposImage;
 
 $json = $_POST['json'];
 $data = json_decode($json);
+
+#----------------------------------IMAGE SETTING FIRST-------------------------------------#
+$logo_image = 'default.png';
+$urlArray = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$segments = explode('/', $urlArray);
+$numSegments = count($segments); 
+$environment = $segments[$numSegments - 3];
+if($environment == 'windows')
+{
+    $image_directory = $data->print_setting->windows_images_directory;
+} else if($environment == 'android'){
+    $image_directory = $data->print_setting->android_images_directory;
+}
+#----------------------------------IMAGE SETTING FIRST-------------------------------------#
         
         /**JIKA ADA BILLS**/
         if($data->printers){
             
             $connector = ($data->printers->printer_conn == 'USB') ? new WindowsPrintConnector($data->printers->printer_address) : new NetworkPrintConnector($data->printers->printer_address) ;
-            if($connector){ #If Connector
+            if($connector && $printer->printer_conn != 'USB'){ #If Connector
                 $print = new Printer($connector);#Open Koneksi Printer
 
                 $print->text("---------------MadaPOS-------------\n");
