@@ -23,6 +23,7 @@ $data = json_decode($json);
             $connector = ($data->printers->printer_conn == 'USB') ? new WindowsPrintConnector($data->printers->printer_address) : new NetworkPrintConnector($data->printers->printer_address) ;
             if($connector){ #If Connector
                 $print = new Printer($connector);#Open Koneksi Printer
+                $print -> initialize();
 
                 $print->text("---------------MadaPOS-------------\n");
                 $print->text("#\n");

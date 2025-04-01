@@ -59,6 +59,7 @@ if(count($data->printers) > 0){
         $connector = ($printer->printer_conn == 'USB') ? new WindowsPrintConnector($printer->printer_address) : new NetworkPrintConnector($printer->printer_address) ;
         if($connector){ #If Connector
             $print = new Printer($connector);#Open Koneksi Printer
+            $print -> initialize();
             if(count($printer->jobs) > 0){
 
                 foreach($printer->jobs as $job){
