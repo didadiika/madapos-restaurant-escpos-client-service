@@ -73,7 +73,7 @@ if(count($data->printers) > 0){
             if(count($printer->jobs) > 0){
 
                 foreach($printer->jobs as $job){
-                    for($i = 0; $i < $job->autoprint_quantity; $i++){ #Foreach Autoprint Quantity
+                    
                     #----------------------------------RECEIPT-------------------------------------#
                     if($job->job == 'Receipt' && $data->waiting->receipt == true){
                         
@@ -462,7 +462,7 @@ if(count($data->printers) > 0){
                         }#End If Count Categories
                     }
                     #----------------------------------END ORDER-------------------------------------#
-                    }#EndForeach Autoprint Quantity
+                    
                 }#End Foreach Jobs
 
             }#End Count Jobs
