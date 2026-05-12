@@ -20,7 +20,16 @@ $data = json_decode($json);
         /**JIKA ADA BILLS**/
         if($data->printers){
             
-            $connector = ($data->printers->printer_conn == 'USB') ? new WindowsPrintConnector($data->printers->printer_address) : new NetworkPrintConnector($data->printers->printer_address) ;
+            switch($data->printers->printer_conn){
+                case 'USB':
+                    $connector = new WindowsPrintConnector($data->printers->printer_address);
+                    break;
+                case 'Ethernet':
+                    $connector = new NetworkPrintConnector($data->printers->printer_address);
+                    break;
+                default:
+                    $connector = null;
+            }
             if($connector){ #If Connector
                 $print = new Printer($connector);#Open Koneksi Printer
                 $print -> initialize();

@@ -56,7 +56,16 @@ if(count($data->printers) > 0){
     }
     #----------Setting Paper-----------#
 
-        $connector = ($printer->printer_conn == 'USB') ? new WindowsPrintConnector($printer->printer_address) : new NetworkPrintConnector($printer->printer_address) ;
+        switch($printer->printer_conn){
+            case 'USB':
+                $connector = new WindowsPrintConnector($printer->printer_address);
+                break;
+            case 'Ethernet':
+                $connector = new NetworkPrintConnector($printer->printer_address);
+                break;
+            default:
+                $connector = null;
+        }
         if($connector && $printer->printer_conn != 'USB'){ #If Connector
             $print = new Printer($connector);#Open Koneksi Printer
             $print -> initialize();
