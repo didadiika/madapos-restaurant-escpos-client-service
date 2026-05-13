@@ -111,7 +111,7 @@ if(count($data->printers) > 0){
                         if($data->receipt->dine_type == "Dine In"){
                             $print -> setTextSize(3, 2);
                             $print -> text("#".$data->desks->numb_desk."\n");
-                            $print -> setTextSize(2, 1);
+                            $print -> setTextSize(2, 2);
                             $print -> text($data->desks->area."\n");
                         } else {
                             $print -> text("#".$data->receipt->dine_type."\n");
@@ -262,7 +262,7 @@ if(count($data->printers) > 0){
                         if($data->receipt->dine_type == "Dine In"){
                             $print -> setTextSize(3, 2);
                             $print -> text("#".$data->desks->numb_desk."\n");
-                            $print -> setTextSize(2, 1);
+                            $print -> setTextSize(2, 2);
                             $print -> text($data->desks->area."\n");
                         } else {
                             $print -> text("#".$data->receipt->dine_type."\n");
@@ -385,7 +385,7 @@ if(count($data->printers) > 0){
                                     if($data->receipt->dine_type == "Dine In"){
                                         $print -> setTextSize(3, 2);
                                         $print -> text("#".$data->desks->numb_desk."\n");
-                                        $print -> setTextSize(2, 1);
+                                        $print -> setTextSize(2, 2);
                                         $print -> text($data->desks->area."\n");
                                     } else {
                                         $print -> text("#".$data->receipt->dine_type."\n");
