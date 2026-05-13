@@ -109,7 +109,7 @@ if(count($data->printers) > 0){
                         if($data->receipt->dine_type == "Dine In"){
                             $print -> setTextSize(3, 2);
                             $print -> text("#".$data->desks->numb_desk."\n");
-                            $print -> setTextSize(2, 1);
+                            $print -> setTextSize(2, 2);
                             $print -> text($data->desks->area."\n");
                         } else {
                             $print -> text("#".$data->receipt->dine_type."\n");
@@ -170,46 +170,122 @@ if(count($data->printers) > 0){
                         }
                         $total = $data->receipt->total_before_disc;
                         $total_length = strlen(uang($total));
-                        if($data->receipt->disc_number > 0){
-                            $disc = "-".uang((int)$data->receipt->disc_number);
+
+                        if ($data->receipt->disc_number > 0) {
+                            $disc = "-" . uang((int)$data->receipt->disc_number);
                             $grand_total = $total - (int)$data->receipt->disc_number;
-                        } else if($data->receipt->disc_percent > 0){
-                            $disc = "-".$data->receipt->disc_percent."%";
-                            $grand_total = $total - ($total * (int)$data->receipt->disc_percent/100);
+                        } else if ($data->receipt->disc_percent > 0) {
+                            $disc = "-" . $data->receipt->disc_percent . "%";
+                            $grand_total = $total - ($total * (int)$data->receipt->disc_percent / 100);
                         } else {
                             $disc = "-";
                             $grand_total = $total;
                         }
+
+                        // Hitung PPN/VAT
+                        if ($data->receipt->tax_vat > 0) {
+                            $tax = uang(
+                                (int)($data->receipt->total_after_disc * ($data->receipt->tax_vat / 100))
+                            );
+                        } else {
+                            $tax = "-";
+                        }
+
                         $discb_length = strlen($disc);
+                        $tax_length = strlen($tax);
                         $grand_length = strlen(uang($grand_total));
                         $paid = (int)$data->receipt->paid;
                         $paid_length = strlen(uang($paid));
-                        $change = ((int)$data->receipt->changed == 0) ? '-' : uang((int)$data->receipt->changed);
+                        $change = ((int)$data->receipt->changed == 0)
+                            ? '-'
+                            : uang((int)$data->receipt->changed);
                         $change_length = strlen($change);
                         $payment = $data->payments;
                         $payment_length = strlen($payment);
-                        
 
-                        $print -> text(str_repeat('-', $max_width)."\n");
-                        $print -> setJustification(Printer::JUSTIFY_LEFT);
+                        $print->text(str_repeat('-', $max_width) . "\n");
+                        $print->setJustification(Printer::JUSTIFY_LEFT);
 
-                        $space_before = 25;
-                        if($printer->printer_paper_size == "58mm") {  $space_before = 9; }
-                        $max_center = 8;
+                        $space_before = 23;
+                        if ($printer->printer_paper_size == "58mm") {
+                            $space_before = 7;
+                        }
+
+                        $max_center = 10;
                         $max_right = 15;
 
-                        $space_between = $max_width - 11 - $discb_length;
-                        $print -> text(str_repeat(' ',$space_before)."DISC".str_repeat(' ',$max_center - strlen("DISC:")).":".str_repeat(' ',$max_right - strlen($disc)).$disc."\n");
-                        $space_total = $max_width - 11 - $grand_length;
-                        $print -> text(str_repeat(' ',$space_before)."TOTAL".str_repeat(' ',$max_center - strlen("TOTAL:")).":".str_repeat(' ',$max_right - strlen(uang($grand_total))).uang($grand_total)."\n");
-                        $space_paid = $max_width - 11 - $paid_length;
-                        $print -> text(str_repeat(' ',$space_before)."BAYAR".str_repeat(' ',$max_center - strlen("BAYAR:")).":".str_repeat(' ',$max_right - strlen(uang($paid))).uang($paid)."\n");
-                        $space_change = $max_width- 11 - $change_length;
-                        $print -> text(str_repeat(' ',$space_before)."KEMBALI".str_repeat(' ',$max_center - strlen("KEMBALI:")).":".str_repeat(' ',$max_right - strlen($change)).$change."\n");
-                        $space_payment = $max_width - 11 - $payment_length;
-                        $print -> text(str_repeat(' ',$space_before)."PAYMENT".str_repeat(' ',$max_center - strlen("PAYMENT:")).":".str_repeat(' ',$max_right - strlen($payment)).$payment."\n");
-                        $print -> setJustification(Printer::JUSTIFY_LEFT);
-                        $print -> text(str_repeat('=', $max_width)."\n");
+                        // DISC
+                        $print->text(
+                            str_repeat(' ', $space_before) .
+                            "DISC" .
+                            str_repeat(' ', $max_center - strlen("DISC:")) .
+                            ":" .
+                            str_repeat(' ', $max_right - strlen($disc)) .
+                            $disc . "\n"
+                        );
+
+                        // PPN hanya ditampilkan jika tax_vat > 0
+                        if ($data->receipt->tax_vat > 0) {
+                            $label_tax = "PPN(" . $data->receipt->tax_vat . "%)";
+
+                            $print->text(
+                                str_repeat(' ', $space_before) .
+                                $label_tax .
+                                str_repeat(
+                                    ' ',
+                                    max(0, $max_center - strlen("PPN(" . $data->receipt->tax_vat . "%):"))
+                                ) .
+                                ":" .
+                                str_repeat(
+                                    ' ',
+                                    max(0, $max_right - strlen($tax))
+                                ) .
+                                $tax . "\n"
+                            );
+                        }
+
+                        // TOTAL
+                        $print->text(
+                            str_repeat(' ', $space_before) .
+                            "TOTAL" .
+                            str_repeat(' ', $max_center - strlen("TOTAL:")) .
+                            ":" .
+                            str_repeat(' ', $max_right - strlen(uang($grand_total))) .
+                            uang($grand_total) . "\n"
+                        );
+
+                        // BAYAR
+                        $print->text(
+                            str_repeat(' ', $space_before) .
+                            "BAYAR" .
+                            str_repeat(' ', $max_center - strlen("BAYAR:")) .
+                            ":" .
+                            str_repeat(' ', $max_right - strlen(uang($paid))) .
+                            uang($paid) . "\n"
+                        );
+
+                        // KEMBALI
+                        $print->text(
+                            str_repeat(' ', $space_before) .
+                            "KEMBALI" .
+                            str_repeat(' ', $max_center - strlen("KEMBALI:")) .
+                            ":" .
+                            str_repeat(' ', $max_right - strlen($change)) .
+                            $change . "\n"
+                        );
+
+                        // PAYMENT
+                        $print->text(
+                            str_repeat(' ', $space_before) .
+                            "PAYMENT" .
+                            str_repeat(' ', $max_center - strlen("PAYMENT:")) .
+                            ":" .
+                            str_repeat(' ', $max_right - strlen($payment)) .
+                            $payment . "\n"
+                        );
+
+                        $print->setJustification(Printer::JUSTIFY_LEFT);
+                        $print->text(str_repeat('=', $max_width) . "\n");
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
                         $print->text($data->print_setting->printer_cashier_footer_info."\n");
                         if($center == 'On')
