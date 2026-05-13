@@ -19,6 +19,7 @@ require __DIR__ . '/../../config.php';
 
 $json = $_POST['json'];
 $data = json_decode($json);
+$copies = $_POST['jumlah_print'];
 
 #----------------------------------IMAGE SETTING FIRST-------------------------------------#
 $logo_image = 'default.png';
@@ -73,7 +74,7 @@ if(count($data->printers) > 0){
             if(count($printer->jobs) > 0){
 
                 foreach($printer->jobs as $job){
-                    
+                    for($i = 0; $i < $copies; $i++){ #Foreach Copies
                     #----------------------------------RECEIPT-------------------------------------#
                     if($job->job == 'Receipt' && $data->waiting->receipt == true){
                         
@@ -462,7 +463,7 @@ if(count($data->printers) > 0){
                         }#End If Count Categories
                     }
                     #----------------------------------END ORDER-------------------------------------#
-                    
+                    }#End For Copies    
                 }#End Foreach Jobs
 
             }#End Count Jobs
