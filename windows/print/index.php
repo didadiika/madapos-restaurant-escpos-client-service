@@ -189,6 +189,7 @@ if(count($data->printers) > 0){
                             $tax = uang(
                                 (int)($data->receipt->total_after_disc * ($data->receipt->tax_vat / 100))
                             );
+                            $grand_total = $grand_total + (int)$data->receipt->total_after_disc * ($data->receipt->tax_vat / 100);
                         } else {
                             $tax = "-";
                         }
