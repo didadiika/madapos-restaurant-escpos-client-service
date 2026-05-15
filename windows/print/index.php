@@ -14,6 +14,7 @@ use Mike42\Escpos\EscposImage;
 date_default_timezone_set("Asia/Jakarta");
 require __DIR__ . '/../../helper/Tanggal_helper.php';
 require __DIR__ . '/../../helper/Uang_helper.php';
+require __DIR__ . '/../../helper/Indent_helper.php';
 require __DIR__ . '/../../config.php';
 
 
@@ -209,83 +210,28 @@ if(count($data->printers) > 0){
                         $print->text(str_repeat('-', $max_width) . "\n");
                         $print->setJustification(Printer::JUSTIFY_LEFT);
 
-                        $space_before = 23;
-                        if ($printer->printer_paper_size == "58mm") {
-                            $space_before = 7;
+                        // DISC
+                        if ($data->receipt->disc_number > 0 || $data->receipt->disc_percent > 0) {
+                        printLeftRight($print, 'DISC', $disc, $max_width);
                         }
 
-                        $max_center = 10;
-                        $max_right = 15;
-
-                        // DISC
-                        $print->text(
-                            str_repeat(' ', $space_before) .
-                            "DISC" .
-                            str_repeat(' ', $max_center - strlen("DISC:")) .
-                            ":" .
-                            str_repeat(' ', $max_right - strlen($disc)) .
-                            $disc . "\n"
-                        );
-
-                        // PPN hanya ditampilkan jika tax_vat > 0
+                        // PPN (jika ada)
                         if ($data->receipt->tax_vat > 0) {
-                            $label_tax = "PPN(" . $data->receipt->tax_vat . "%)";
-
-                            $print->text(
-                                str_repeat(' ', $space_before) .
-                                $label_tax .
-                                str_repeat(
-                                    ' ',
-                                    max(0, $max_center - strlen("PPN(" . $data->receipt->tax_vat . "%):"))
-                                ) .
-                                ":" .
-                                str_repeat(
-                                    ' ',
-                                    max(0, $max_right - strlen($tax))
-                                ) .
-                                $tax . "\n"
-                            );
+                            $label_tax = 'PPN(' . $data->receipt->tax_vat . '%)';
+                            printLeftRight($print, $label_tax, $tax, $max_width);
                         }
 
                         // TOTAL
-                        $print->text(
-                            str_repeat(' ', $space_before) .
-                            "TOTAL" .
-                            str_repeat(' ', $max_center - strlen("TOTAL:")) .
-                            ":" .
-                            str_repeat(' ', $max_right - strlen(uang($grand_total))) .
-                            uang($grand_total) . "\n"
-                        );
+                        printLeftRight($print, 'TOTAL', uang($grand_total), $max_width);
 
                         // BAYAR
-                        $print->text(
-                            str_repeat(' ', $space_before) .
-                            "BAYAR" .
-                            str_repeat(' ', $max_center - strlen("BAYAR:")) .
-                            ":" .
-                            str_repeat(' ', $max_right - strlen(uang($paid))) .
-                            uang($paid) . "\n"
-                        );
+                        printLeftRight($print, 'BAYAR', uang($paid), $max_width);
 
                         // KEMBALI
-                        $print->text(
-                            str_repeat(' ', $space_before) .
-                            "KEMBALI" .
-                            str_repeat(' ', $max_center - strlen("KEMBALI:")) .
-                            ":" .
-                            str_repeat(' ', $max_right - strlen($change)) .
-                            $change . "\n"
-                        );
+                        printLeftRight($print, 'KEMBALI', $change, $max_width);
 
                         // PAYMENT
-                        $print->text(
-                            str_repeat(' ', $space_before) .
-                            "PAYMENT" .
-                            str_repeat(' ', $max_center - strlen("PAYMENT:")) .
-                            ":" .
-                            str_repeat(' ', $max_right - strlen($payment)) .
-                            $payment . "\n"
-                        );
+                        printLeftRight($print, 'PAYMENT', $payment, $max_width);
 
                         $print->setJustification(Printer::JUSTIFY_LEFT);
                         $print->text(str_repeat('=', $max_width) . "\n");
