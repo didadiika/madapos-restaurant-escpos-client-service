@@ -254,6 +254,15 @@ if(count($data->printers) > 0){
                         
                     }
                     #----------------------------------END RECEIPT-------------------------------------#
+                    
+                    #----------------------------------PUSH DRAWER-------------------------------------#
+                    else if($job->job == 'Receipt' && $data->waiting->push_drawer == true){
+                        if($printer->printer_cash_drawer == true){
+                            $print->pulse(0, 100, 100);
+                        }
+                    }
+                    #----------------------------------END PUSH DRAWER---------------------------------#
+
 
                     #----------------------------------BILL-------------------------------------#
                     if($job->job == 'Receipt' && $data->waiting->bill == true){
