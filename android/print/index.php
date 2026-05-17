@@ -15,6 +15,7 @@ date_default_timezone_set("Asia/Jakarta");
 require __DIR__ . '/../../helper/Tanggal_helper.php';
 require __DIR__ . '/../../helper/Uang_helper.php';
 require __DIR__ . '/../../helper/Indent_helper.php';
+require __DIR__ . '/../../helper/Connection_helper.php'; 
 require __DIR__ . '/../../config.php';
 
 
@@ -63,6 +64,16 @@ if(count($data->printers) > 0){
                 $connector = new WindowsPrintConnector($printer->printer_address);
                 break;
             case 'Ethernet':
+                $check = checkNetworkPrinter($printer->printer_address);
+                if (!$check['success']) {
+                    echo json_encode([
+                        'success' => false,
+                        'printer' => $printer->printer_address,
+                        'message' => 'Printer Ethernet: '. $printer->printer_address .' offline.',
+                        'error'   => $check['error']
+                    ]);
+                    continue 2; // lanjut ke printer berikutnya
+                }
                 $connector = new NetworkPrintConnector($printer->printer_address);
                 break;
             default:
