@@ -2,7 +2,6 @@
 header('Access-Control-Allow-Origin: *'); 
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 require __DIR__ . '/../../vendor/autoload.php';
-use Mike42\Escpos\ImagickEscposImage;#Butuh Ekstensi Imagick
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Mike42\Escpos\Printer;
@@ -343,7 +342,6 @@ if(count($data->printers) > 0){
                     }
                     #----------------------------------END PUSH DRAWER---------------------------------#
 
-
                     #----------------------------------BILL-------------------------------------#
                     if($job->job == 'Receipt' && $data->waiting->bill == true){
                         
@@ -427,15 +425,23 @@ if(count($data->printers) > 0){
                         $batas = 10;
                         $panjang_total = strlen(uang($total));
                         
+                        $disc = 0;
+                        $grand_total = $total;
                         if($data->receipt->disc_number > 0){
                             $disc = "-".uang((int)$data->receipt->disc_number);
                             $grand_total = $total - (int)$data->receipt->disc_number;
                         } else if($data->receipt->disc_percent > 0){
                             $disc = "-".$data->receipt->disc_percent."%";
                             $grand_total = $total - ($total * (int)$data->receipt->disc_percent/100);
-                        } else {
-                            $disc = "-";
-                            $grand_total = $total;
+                        }
+
+                        // Hitung PPN/VAT
+                        $tax = 0;
+                        if ($data->receipt->tax_vat > 0) {
+                            $tax = uang(
+                                (int)( $grand_total * ($data->receipt->tax_vat / 100))
+                            );
+                            $grand_total = $grand_total + (int)($grand_total * ($data->receipt->tax_vat / 100));
                         }
                         
                         $panjang_discb = strlen($disc);
@@ -446,10 +452,15 @@ if(count($data->printers) > 0){
                         $batas_kanan = 48 - $max_width;
                         } else { $batas_kanan = 0; }
                         $print -> text(str_repeat('-', $max_width)."\n");
-                        $print -> setJustification(Printer::JUSTIFY_RIGHT);
-                        $print -> text("SUB TOTAL: ".str_repeat(' ', $batas - $panjang_total + 2).uang($total).str_repeat(' ', $batas_kanan)."\n");
-                        $print -> text("DISC     : ".str_repeat(' ', $batas - $panjang_discb + 2).$disc.str_repeat(' ', $batas_kanan)."\n");
-                        $print -> text("TOTAL    : ".str_repeat(' ', $batas - $panjang_grand + 2).uang($grand_total).str_repeat(' ', $batas_kanan)."\n");
+                        printLeftRight($print, 'SUB TOTAL', uang($total), $max_width);
+                        if($data->receipt->disc_percent > 0 || $data->receipt->disc_number > 0) {
+                            printLeftRight($print, 'DISC', $disc, $max_width);
+                        }
+                        if ($data->receipt->tax_vat > 0) {
+                            $label_tax = 'PPN(' . $data->receipt->tax_vat . '%)';
+                            printLeftRight($print, $label_tax, $tax, $max_width);
+                        }
+                        printLeftRight($print, 'TOTAL', uang($grand_total), $max_width);
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
                         $print -> text(str_repeat('=', $max_width)."\n");
                         if($center == 'On')
