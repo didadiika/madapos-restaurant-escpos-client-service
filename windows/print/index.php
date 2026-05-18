@@ -18,7 +18,10 @@ require __DIR__ . '/../../config.php';
 
 $json = $_POST['json'];
 $data = json_decode($json);
-$copies = $_POST['jumlah_print'];
+$receiptCopies = isset($_POST['receipt_copies']) ? (int)$_POST['receipt_copies'] : 1;
+$orderCopies   = isset($_POST['order_copies']) ? (int)$_POST['order_copies'] : 1;
+$billCopies    = isset($_POST['bill_copies']) ? (int)$_POST['bill_copies'] : 1;
+
 
 #----------------------------------IMAGE SETTING FIRST-------------------------------------#
 $logo_image = 'default.png';
@@ -83,6 +86,17 @@ if(count($data->printers) > 0){
             if(count($printer->jobs) > 0){
 
                 foreach($printer->jobs as $job){
+                     // Tentukan jumlah copy berdasarkan jenis job
+                    if ($job->job == 'Receipt') {
+                        $copies = $receiptCopies;
+                    } elseif ($job->job == 'Order') {
+                        $copies = $orderCopies;
+                    } elseif ($job->job == 'Bill') {
+                        $copies = $billCopies;
+                    } else {
+                        $copies = 1;
+                    }
+
                     for($i = 0; $i < $copies; $i++){ #Foreach Copies
                     #----------------------------------RECEIPT-------------------------------------#
                     if($job->job == 'Receipt' && $data->waiting->receipt == true){
