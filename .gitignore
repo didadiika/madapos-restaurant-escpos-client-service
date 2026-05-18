@@ -1,0 +1,6 @@
+images/**
+
+# Kecualikan file yang ingin tetap di-track
+!images/default.png
+!images/mada.png
+!images/footer.png
