@@ -112,8 +112,12 @@ if(count($data->printers) > 0){
                                 $fileName = basename(parse_url($logoUrl, PHP_URL_PATH));
                                 $localPath = $localDir . DIRECTORY_SEPARATOR . $fileName;
 
-                                // Download jika file belum ada
-                                if (!file_exists($localPath)) {
+                                /**
+                                 * Download ulang jika:
+                                 * 1. File belum ada
+                                 * 2. File kosong (0 byte)
+                                 */
+                                if (!file_exists($localPath) || filesize($localPath) === 0) {
                                     $ch = curl_init($logoUrl);
 
                                     curl_setopt_array($ch, [
@@ -146,10 +150,11 @@ if(count($data->printers) > 0){
                                         );
                                     }
 
+                                    // Simpan file ke cache lokal
                                     file_put_contents($localPath, $imageData);
                                 }
 
-                                // Cetak logo
+                                // Cetak logo jika file valid
                                 if (file_exists($localPath) && filesize($localPath) > 0) {
                                     try {
                                         $logo = EscposImage::load($localPath);
