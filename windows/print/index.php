@@ -486,7 +486,7 @@ if(count($data->printers) > 0){
                         if(count($printer->order_per_category) > 0){#If Count Categories
                             foreach($printer->order_per_category as $category){#Foreach Category
                                 if(count($category->orders) > 0){ #If Count Order
-                                    $print -> getPrintConnector() -> write(PRINTER::ESC . "B" . chr(4) . chr(1));
+                                    $print -> getPrintConnector() -> write(Printer::ESC . "B" . chr(4) . chr(1));
                                     
                                     $print->selectPrintMode(Printer::MODE_FONT_A);
                                     $print -> setJustification(Printer::JUSTIFY_LEFT);
