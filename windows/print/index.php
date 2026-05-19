@@ -88,12 +88,11 @@ if(count($data->printers) > 0){
                 foreach($printer->jobs as $job){
                      // Tentukan jumlah copy berdasarkan jenis job
                     if ($job->job == 'Receipt') {
-                        $copies = $receiptCopies;
+                        $copies = !empty($receiptCopies) ? $receiptCopies : $billCopies;
                     } elseif ($job->job == 'Order') {
                         $copies = $orderCopies;
-                    } elseif ($job->job == 'Bill') {
-                        $copies = $billCopies;
-                    } else {
+                    }
+                    else {
                         $copies = 1;
                     }
 
