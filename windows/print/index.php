@@ -61,6 +61,17 @@ if(count($data->printers) > 0){
 
         switch($printer->printer_conn){
             case 'USB':
+                 $check = checkWindowsPrinter($printer->printer_address);
+
+                if (!$check['success']) {
+                    echo json_encode([
+                        'success' => false,
+                        'printer' => $printer->printer_address,
+                        'message' => 'Printer USB: ' . $printer->printer_address . ' offline atau tidak dapat diakses.',
+                        'error'   => $check['error'],
+                    ]);
+                    continue 2; // lanjut ke printer berikutnya
+                }
                 $connector = new WindowsPrintConnector($printer->printer_address);
                 break;
             case 'Ethernet':
@@ -96,7 +107,7 @@ if(count($data->printers) > 0){
                         $copies = 1;
                     }
 
-                    for($i = 0; $i < $copies; $i++){ #Foreach Copies
+                    for($i = 0; $i < $copies; $i++){#Foreach Copies
                     #----------------------------------RECEIPT-------------------------------------#
                     if($job->job == 'Receipt' && $data->waiting->receipt == true){
                         

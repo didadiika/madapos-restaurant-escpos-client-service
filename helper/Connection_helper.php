@@ -13,6 +13,8 @@
  *   'error'   => string|null
  * ]
  */
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Mike42\Escpos\Printer;
 
 function checkNetworkPrinter(string $address, int $timeout = 3): array
 {
@@ -60,6 +62,30 @@ function checkNetworkPrinter(string $address, int $timeout = 3): array
         'port'    => $port,
         'error'   => null
     ];
+}
+
+function checkWindowsPrinter(string $printerName): array
+{
+    try {
+        // Coba buka koneksi ke printer
+        $connector = new WindowsPrintConnector($printerName);
+
+        // Inisialisasi printer untuk memastikan benar-benar bisa diakses
+        $printer = new Printer($connector);
+
+        // Tutup koneksi
+        $printer->close();
+
+        return [
+            'success' => true,
+            'error'   => null,
+        ];
+    } catch (\Throwable $e) {
+        return [
+            'success' => false,
+            'error'   => $e->getMessage(),
+        ];
+    }
 }
 
 ?>
