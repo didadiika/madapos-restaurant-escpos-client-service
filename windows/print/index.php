@@ -43,19 +43,11 @@ if(count($data->printers) > 0){
 
     foreach($data->printers as $printer){
     #----------Setting Paper-----------#
-    if($printer->printer_type == '58' || ($printer->printer_paper_size == '80mm' && $printer->printer_type == '80'))
-    {
-        $max_width = 48; 
-        if($printer->printer_paper_size == '58mm'){
-            $max_width = 32;
-        } 
-        $center = 'On';
-        $right = 'On';
-    }
-    else{
-        $max_width = 32;
-        $center = 'Off';
-        $right = 'Off';
+    $max_width = 48;# 48 char for 80mm & 32 for 58mm 
+    $print_width_area = 576; # 576 dots for 80mm & 384 for 58mm 
+    if($printer->printer_paper_size == '58mm'){
+        $max_width = 32;# 48 char for 80mm & 32 for 58mm 
+        $print_width_area = 384; # 576 dots for 80mm & 384 for 58mm 
     }
     #----------Setting Paper-----------#
 
@@ -94,6 +86,7 @@ if(count($data->printers) > 0){
         if($connector){ #If Connector
             $print = new Printer($connector);#Open Koneksi Printer
             $print -> initialize();
+            $print->setPrintWidth($print_width_area);
             if(count($printer->jobs) > 0){
 
                 foreach($printer->jobs as $job){
@@ -179,10 +172,9 @@ if(count($data->printers) > 0){
                                     try {
                                         $logo = EscposImage::load($localPath);
 
-                                        if($center == 'On')
-                                        {
+                                        
                                             $print -> setJustification(Printer::JUSTIFY_CENTER);
-                                        }
+                                        
                                         $print->bitImage($logo);
                                         $print->feed(1);
                                     } catch (\Throwable $e) {
@@ -222,21 +214,18 @@ if(count($data->printers) > 0){
                         }
                         
                         $print -> setTextSize(1, 1);
-                        
-                        if($center == 'On')
-                        {
-                        $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        }
+                        $print -> setJustification(Printer::JUSTIFY_LEFT);
                         $print -> text(str_repeat('=',$max_width)."\n");
+                        $print -> setJustification(Printer::JUSTIFY_CENTER);
                         $print -> setBarcodeHeight(40);
                         $print -> setBarcodeWidth(2);
                         $print->barcode($data->receipt->sale_uid, Printer::BARCODE_CODE39);
                         
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
-                        $print->text("UID      : ".substr($data->receipt->sale_uid,0,$max_width - 11)."\n");
-                        $print->text("Pelanggan: ".substr($data->receipt->customer_name,0,$max_width - 11)."\n");
-                        $print->text("Tanggal  : ".substr(tanggal_time_db_to_id($data->receipt->date),0,$max_width - 11)."\n");
-                        $print->text("Kasir    : ".substr($data->receipt->cashier->name,0,$max_width - 11)."\n");
+                        printLeftRight($print, 'UID', $data->receipt->sale_uid, $max_width);
+                        printLeftRight($print, 'Nama', $data->receipt->customer_name, $max_width);
+                        printLeftRight($print, 'Tanggal', tanggal_time_db_to_id($data->receipt->date), $max_width);
+                        printLeftRight($print, 'Kasir', $data->receipt->cashier->name, $max_width);
 
                         $max_qty = 4;
                         $space_between_qty_item = 1;
@@ -340,10 +329,9 @@ if(count($data->printers) > 0){
                         $print->text(str_repeat('=', $max_width) . "\n");
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
                         $print->text($data->print_setting->printer_cashier_footer_info."\n");
-                        if($center == 'On')
-                        {
+                        
                             $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        }
+                        
                         $print -> text("TERIMA KASIH \n");
                         if($data->print_setting->show_powered_by == true){
                             $print->setEmphasis(true);
@@ -372,25 +360,22 @@ if(count($data->printers) > 0){
 
                         
 
-                        if($center == 'On')
-                        {
+                        
                             $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        }
+                        
                         $print->selectPrintMode(Printer::MODE_FONT_A);
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
                         $print -> setTextSize(2, 2);
                         $print->text("#BILL\n");
                         $print -> setTextSize(1, 1);
-                        if($center == 'On')
-                        {
+                        
                             $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        }
+                        
                         $print->text($data->store->header_bill."\n");
 
-                        if($center == 'On')
-                        {
+                        
                             $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        }
+                        
                         $print->selectPrintMode(Printer::MODE_FONT_A | Printer::MODE_DOUBLE_HEIGHT | Printer::MODE_DOUBLE_WIDTH);
                         
                         if($data->receipt->dine_type == "Dine In"){
@@ -405,17 +390,15 @@ if(count($data->printers) > 0){
                         $print -> setTextSize(1, 1);
                         
                         
-                        if($center == 'On')
-                        {
+                        
                         $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        }
+                        
                         $print -> text(str_repeat('=', floor(($max_width - strlen("BILL") )/2) )."BILL".str_repeat('=', floor(($max_width- strlen("BILL"))/2) )."\n");
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
                         $print->text("Pelanggan   : ".$data->receipt->customer_name."\n");
-                        if($center == 'On')
-                        {
+                        
                         $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        }
+                        
                         $print -> setTextSize(2, 1);
                         $print->text(strtoupper("#UNPAID")."\n");
                         $print -> setTextSize(1, 1);
@@ -487,10 +470,9 @@ if(count($data->printers) > 0){
                         printLeftRight($print, 'TOTAL', uang($grand_total), $max_width);
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
                         $print -> text(str_repeat('=', $max_width)."\n");
-                        if($center == 'On')
-                        {
+                        
                             $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        }
+                        
                         if($data->print_setting->show_powered_by == true){
                             $print->setEmphasis(true);
                             $print->text("Powered by MadaPOS\n");
@@ -520,10 +502,9 @@ if(count($data->printers) > 0){
                                     // }
                                     $print -> text("#".$category->category_name."\n");
 
-                                    if($center == 'On')
-                                    {
+                                    
                                     $print -> setJustification(Printer::JUSTIFY_CENTER);
-                                    }
+                                    
                                     
                                     $print->text($data->store->header_bill."\n");
                                     
@@ -539,10 +520,9 @@ if(count($data->printers) > 0){
                                     }
                                     $print -> setTextSize(1, 1);
                                     
-                                    if($center == 'On')
-                                    {
+                                    
                                     $print -> setJustification(Printer::JUSTIFY_CENTER);
-                                    }
+                                    
                                     $print -> text(str_repeat('=',$max_width)."\n");
                                     $print -> setJustification(Printer::JUSTIFY_LEFT);
                                     if(strpos($data->receipt->date, ' ') == true){
@@ -551,10 +531,9 @@ if(count($data->printers) > 0){
                                         $print->text("Tanggal : ".tanggal_db_to_id($data->receipt->date)."\n");
                                     }
                                     
-                                    if($center == 'On')
-                                    {
+                                    
                                     $print -> setJustification(Printer::JUSTIFY_CENTER);
-                                    }
+                                    
                                     $print -> setTextSize(2, 1);
                                     $print->text(strtoupper($data->receipt->customer_name)."\n");
                                     $print -> setTextSize(1, 1);
@@ -593,10 +572,9 @@ if(count($data->printers) > 0){
                                     $print -> text($no." ITEM(S)\n");
                                     $print -> text(str_repeat('=', $max_width)."\n");
                                 
-                                    if($center == 'On')
-                                    {
+                                    
                                         $print -> setJustification(Printer::JUSTIFY_CENTER);
-                                    }
+                                    
                                     
                                     if($data->print_setting->show_powered_by == true){
                                         $print->setEmphasis(true);
