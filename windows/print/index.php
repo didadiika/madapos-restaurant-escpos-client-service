@@ -114,11 +114,8 @@ if(count($data->printers) > 0){
                         if($data->waiting->push_drawer == true && $printer->printer_cash_drawer == true){
                             $print->pulse(0, 100, 100);
                         }
-
-                        if($center == 'On')
-                        {
-                            $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        }
+                        $print -> setJustification(Printer::JUSTIFY_LEFT);
+                        
                         if($job->print_with_logo == true){
                             // Cetak Image
                             if (!empty($data->store->photo_link)) {
@@ -182,7 +179,10 @@ if(count($data->printers) > 0){
                                     try {
                                         $logo = EscposImage::load($localPath);
 
-                                        $print->setJustification(Printer::JUSTIFY_CENTER);
+                                        if($center == 'On')
+                                        {
+                                            $print -> setJustification(Printer::JUSTIFY_CENTER);
+                                        }
                                         $print->bitImage($logo);
                                         $print->feed(1);
                                     } catch (\Throwable $e) {
@@ -551,7 +551,10 @@ if(count($data->printers) > 0){
                                         $print->text("Tanggal : ".tanggal_db_to_id($data->receipt->date)."\n");
                                     }
                                     
+                                    if($center == 'On')
+                                    {
                                     $print -> setJustification(Printer::JUSTIFY_CENTER);
+                                    }
                                     $print -> setTextSize(2, 1);
                                     $print->text(strtoupper($data->receipt->customer_name)."\n");
                                     $print -> setTextSize(1, 1);
