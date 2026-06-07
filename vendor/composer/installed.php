@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '2e3c8126b1ff14cb10bc28e2b58387526b73eb43',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '2e3c8126b1ff14cb10bc28e2b58387526b73eb43',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -277,6 +277,15 @@
             'reference' => 'ed9ded2a9298e4084a9c557ab74a89b71e43dbdb',
             'type' => 'library',
             'install_path' => __DIR__ . '/../mike42/gfx-php',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'picqer/php-barcode-generator' => array(
+            'pretty_version' => 'v3.2.4',
+            'version' => '3.2.4.0',
+            'reference' => '16a5cfb74eb8b7a0aa2e60427d98599aa8259380',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../picqer/php-barcode-generator',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

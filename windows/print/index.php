@@ -6,6 +6,7 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
+use Picqer\Barcode\BarcodeGeneratorPNG;
 
 date_default_timezone_set("Asia/Jakarta");
 require __DIR__ . '/../../helper/Tanggal_helper.php';
@@ -216,11 +217,22 @@ if(count($data->printers) > 0){
                         $print -> setTextSize(1, 1);
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
                         $print -> text(str_repeat('=',$max_width)."\n");
-                        $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        $print -> setBarcodeHeight(40);
-                        $print -> setBarcodeWidth(2);
-                        $print->barcode($data->receipt->sale_uid, Printer::BARCODE_CODE39);
+                        $generator = new BarcodeGeneratorPNG();
+                        $barcodeData = $generator->getBarcode(
+                            $data->receipt->sale_uid,
+                            $generator::TYPE_CODE_39,
+                            2,
+                            35
+                        );
+
+                        $tempFile = sys_get_temp_dir() . '/barcode.png';
+                        file_put_contents($tempFile, $barcodeData);
+                        $image = EscposImage::load($tempFile, false);
+                        $print->setJustification(Printer::JUSTIFY_CENTER);
+                        $print->bitImage($image);
+                        unlink($tempFile);
                         
+                        $print->text("\n");
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
                         printLeftRight($print, 'UID', $data->receipt->sale_uid, $max_width);
                         printLeftRight($print, 'Nama', $data->receipt->customer_name, $max_width);

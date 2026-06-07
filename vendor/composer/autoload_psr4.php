@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'lecodeurdudimanche\\PHPBluetooth\\' => array($vendorDir . '/lecodeurdudimanche/php-bluetooth/src'),
+    'Picqer\\Barcode\\' => array($vendorDir . '/picqer/php-barcode-generator/src'),
     'Mike42\\' => array($vendorDir . '/mike42/escpos-php/src/Mike42', $vendorDir . '/mike42/gfx-php/src/Mike42'),
     'Hoa\\Zformat\\' => array($vendorDir . '/hoa/zformat'),
     'Hoa\\Xyl\\' => array($vendorDir . '/hoa/xyl'),

@@ -12,15 +12,19 @@ class ComposerStaticInit0fa08eb1757b8768c13094d94e68d670
     );
 
     public static $prefixLengthsPsr4 = array (
-        'l' => 
+        'l' =>
         array (
             'lecodeurdudimanche\\PHPBluetooth\\' => 32,
         ),
-        'M' => 
+        'P' =>
+        array (
+            'Picqer\\Barcode\\' => 15,
+        ),
+        'M' =>
         array (
             'Mike42\\' => 7,
         ),
-        'H' => 
+        'H' =>
         array (
             'Hoa\\Zformat\\' => 12,
             'Hoa\\Xyl\\' => 8,
@@ -52,116 +56,120 @@ class ComposerStaticInit0fa08eb1757b8768c13094d94e68d670
     );
 
     public static $prefixDirsPsr4 = array (
-        'lecodeurdudimanche\\PHPBluetooth\\' => 
+        'lecodeurdudimanche\\PHPBluetooth\\' =>
         array (
             0 => __DIR__ . '/..' . '/lecodeurdudimanche/php-bluetooth/src',
         ),
-        'Mike42\\' => 
+        'Picqer\\Barcode\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/picqer/php-barcode-generator/src',
+        ),
+        'Mike42\\' =>
         array (
             0 => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42',
             1 => __DIR__ . '/..' . '/mike42/gfx-php/src/Mike42',
         ),
-        'Hoa\\Zformat\\' => 
+        'Hoa\\Zformat\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/zformat',
         ),
-        'Hoa\\Xyl\\' => 
+        'Hoa\\Xyl\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/xyl',
         ),
-        'Hoa\\Xml\\' => 
+        'Hoa\\Xml\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/xml',
         ),
-        'Hoa\\Visitor\\' => 
+        'Hoa\\Visitor\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/visitor',
         ),
-        'Hoa\\View\\' => 
+        'Hoa\\View\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/view',
         ),
-        'Hoa\\Ustring\\' => 
+        'Hoa\\Ustring\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/ustring',
         ),
-        'Hoa\\Stringbuffer\\' => 
+        'Hoa\\Stringbuffer\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/stringbuffer',
         ),
-        'Hoa\\Stream\\' => 
+        'Hoa\\Stream\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/stream',
         ),
-        'Hoa\\Router\\' => 
+        'Hoa\\Router\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/router',
         ),
-        'Hoa\\Regex\\' => 
+        'Hoa\\Regex\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/regex',
         ),
-        'Hoa\\Realdom\\' => 
+        'Hoa\\Realdom\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/realdom',
         ),
-        'Hoa\\Protocol\\' => 
+        'Hoa\\Protocol\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/protocol',
         ),
-        'Hoa\\Praspel\\' => 
+        'Hoa\\Praspel\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/praspel',
         ),
-        'Hoa\\Math\\' => 
+        'Hoa\\Math\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/math',
         ),
-        'Hoa\\Locale\\' => 
+        'Hoa\\Locale\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/locale',
         ),
-        'Hoa\\Iterator\\' => 
+        'Hoa\\Iterator\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/iterator',
         ),
-        'Hoa\\Http\\' => 
+        'Hoa\\Http\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/http',
         ),
-        'Hoa\\File\\' => 
+        'Hoa\\File\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/file',
         ),
-        'Hoa\\Exception\\' => 
+        'Hoa\\Exception\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/exception',
         ),
-        'Hoa\\Event\\' => 
+        'Hoa\\Event\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/event',
         ),
-        'Hoa\\Dispatcher\\' => 
+        'Hoa\\Dispatcher\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/dispatcher',
         ),
-        'Hoa\\Devtools\\' => 
+        'Hoa\\Devtools\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/devtools',
         ),
-        'Hoa\\Console\\' => 
+        'Hoa\\Console\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/console',
         ),
-        'Hoa\\Consistency\\' => 
+        'Hoa\\Consistency\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/consistency',
         ),
-        'Hoa\\Compiler\\' => 
+        'Hoa\\Compiler\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/compiler',
         ),
-        'Hoa\\Cli\\' => 
+        'Hoa\\Cli\\' =>
         array (
             0 => __DIR__ . '/..' . '/hoa/cli',
         ),
