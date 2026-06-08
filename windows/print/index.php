@@ -339,10 +339,13 @@ if(count($data->printers) > 0){
 
                         $print->setJustification(Printer::JUSTIFY_LEFT);
                         $print->text(str_repeat('=', $max_width) . "\n");
+
+                        if($data->print_setting->printer_cashier_footer_info){
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
                         $print->text($data->print_setting->printer_cashier_footer_info."\n");
+                        }
                         
-                            $print -> setJustification(Printer::JUSTIFY_CENTER);
+                        $print -> setJustification(Printer::JUSTIFY_CENTER);
                         
                         $print -> text("TERIMA KASIH \n");
                         if($data->print_setting->show_powered_by == true){
@@ -352,9 +355,7 @@ if(count($data->printers) > 0){
                         }
                         if($printer->printer_footer_space > 0){$print -> feed($printer->printer_footer_space); }
                         $print->cut();#Memotong kertas
-                        
-                        
-                        
+                                
                     }
                     #----------------------------------END RECEIPT-------------------------------------#
                     
