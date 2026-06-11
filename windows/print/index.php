@@ -111,7 +111,7 @@ if(count($data->printers) > 0){
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
                         
                         if($job->print_with_logo == true){
-                            // Cetak Image
+                            // Cetak Logo
                             if (!empty($data->store->photo_link)) {
                                 $logoUrl = trim($data->store->photo_link);
 
@@ -172,10 +172,7 @@ if(count($data->printers) > 0){
                                 if (file_exists($localPath) && filesize($localPath) > 0) {
                                     try {
                                         $logo = EscposImage::load($localPath);
-
-                                        
-                                            $print -> setJustification(Printer::JUSTIFY_CENTER);
-                                        
+                                        $print -> setJustification(Printer::JUSTIFY_CENTER);
                                         $print->bitImage($logo);
                                         $print->feed(1);
                                     } catch (\Throwable $e) {
@@ -374,8 +371,7 @@ if(count($data->printers) > 0){
                         
 
                         
-                            $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        
+                        $print -> setJustification(Printer::JUSTIFY_CENTER);
                         $print->selectPrintMode(Printer::MODE_FONT_A);
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
                         $print -> setTextSize(2, 2);

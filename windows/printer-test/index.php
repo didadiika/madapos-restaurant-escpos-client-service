@@ -19,6 +19,13 @@ $data = json_decode($json);
         
         /**JIKA ADA BILLS**/
         if($data->printers){
+
+        $max_width = 48;# 48 char for 80mm & 32 for 58mm 
+        $print_width_area = 576; # 576 dots for 80mm & 384 for 58mm 
+        if($data->printers->printer_paper_size == '58mm'){
+            $max_width = 32;# 48 char for 80mm & 32 for 58mm 
+            $print_width_area = 384; # 576 dots for 80mm & 384 for 58mm 
+        }
             
             switch($data->printers->printer_conn){
                 case 'USB':
@@ -33,7 +40,7 @@ $data = json_decode($json);
             if($connector){ #If Connector
                 $print = new Printer($connector);#Open Koneksi Printer
                 $print -> initialize();
-
+                $print->setPrintWidth($print_width_area);
                 $print->text("---------------MadaPOS-------------\n");
                 $print->text("#\n");
                 $print->text("#\n");
