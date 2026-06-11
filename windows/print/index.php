@@ -108,14 +108,15 @@ if(count($data->printers) > 0){
                             $print->pulse(0, 100, 100);
                         }
                         $print -> setJustification(Printer::JUSTIFY_CENTER);
+                        // Folder cache lokal
+                        $localDir = __DIR__ . '/../../images';
                         
                         if($job->print_with_logo == true){
                             // Cetak Logo
                             if (!empty($data->store->photo_link)) {
                                 $logoUrl = trim($data->store->photo_link);
 
-                                // Folder cache lokal
-                                $localDir = __DIR__ . '/../../images';
+                                
 
                                 if (!is_dir($localDir)) {
                                     mkdir($localDir, 0777, true);
@@ -345,9 +346,20 @@ if(count($data->printers) > 0){
                         
                         $print -> text("TERIMA KASIH \n");
                         if($data->print_setting->show_powered_by == true){
-                            $print->setEmphasis(true);
+                            $localPath = $localDir . DIRECTORY_SEPARATOR . 'footer.png';
+                            if (file_exists($localPath) && filesize($localPath) > 0) {
+                                try {
+                                    $mada_footer = EscposImage::load($localPath);
+                                    $print->bitImage($mada_footer);
+                                    $print->feed(1);
+                                } catch (\Throwable $e) {
+                                    error_log('Gagal mencetak footer: ' . $e->getMessage());
+                                }
+                            } else {
+                                $print->setEmphasis(true);
                             $print->text("Powered by MadaPOS\n");
                             $print->setEmphasis(false);
+                            }
                         }
                         if($printer->printer_footer_space > 0){$print -> feed($printer->printer_footer_space); }
                         $print->cut();#Memotong kertas
@@ -370,20 +382,13 @@ if(count($data->printers) > 0){
                         
 
                         
-                        $print -> setJustification(Printer::JUSTIFY_CENTER);
                         $print->selectPrintMode(Printer::MODE_FONT_A);
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
                         $print -> setTextSize(2, 2);
                         $print->text("#BILL\n");
                         $print -> setTextSize(1, 1);
-                        
-                            $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        
+                        $print -> setJustification(Printer::JUSTIFY_CENTER);
                         $print->text($data->store->header_bill."\n");
-
-                        
-                            $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        
                         $print->selectPrintMode(Printer::MODE_FONT_A | Printer::MODE_DOUBLE_HEIGHT | Printer::MODE_DOUBLE_WIDTH);
                         
                         if($data->receipt->dine_type == "Dine In"){
@@ -394,19 +399,11 @@ if(count($data->printers) > 0){
                         } else {
                             $print -> text("#".$data->receipt->dine_type."\n");
                         }
-                        
                         $print -> setTextSize(1, 1);
-                        
-                        
-                        
-                        $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        
                         $print -> text(str_repeat('=', floor(($max_width - strlen("BILL") )/2) )."BILL".str_repeat('=', floor(($max_width- strlen("BILL"))/2) )."\n");
                         $print -> setJustification(Printer::JUSTIFY_LEFT);
                         $print->text("Pelanggan   : ".$data->receipt->customer_name."\n");
-                        
                         $print -> setJustification(Printer::JUSTIFY_CENTER);
-                        
                         $print -> setTextSize(2, 1);
                         $print->text(strtoupper("#UNPAID")."\n");
                         $print -> setTextSize(1, 1);
