@@ -83,7 +83,6 @@ if(count($data->printers) > 0){
             default:
                 $connector = null;
         }
-
         if($connector){ #If Connector
             $print = new Printer($connector);#Open Koneksi Printer
             $print -> initialize();
@@ -108,7 +107,7 @@ if(count($data->printers) > 0){
                         if($data->waiting->push_drawer == true && $printer->printer_cash_drawer == true){
                             $print->pulse(0, 100, 100);
                         }
-                        $print -> setJustification(Printer::JUSTIFY_LEFT);
+                        $print -> setJustification(Printer::JUSTIFY_CENTER);
                         
                         if($job->print_with_logo == true){
                             // Cetak Logo
