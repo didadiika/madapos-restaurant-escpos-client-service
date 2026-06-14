@@ -578,7 +578,7 @@ if(count($data->printers) > 0){
                                     $print -> text(str_repeat('=', $max_width)."\n");
                                 
                                     
-                                        $print -> setJustification(Printer::JUSTIFY_CENTER);
+                                    $print -> setJustification(Printer::JUSTIFY_CENTER);
                                     
                                     
                                     if($data->print_setting->show_powered_by == true){

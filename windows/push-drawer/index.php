@@ -2,14 +2,9 @@
 header('Access-Control-Allow-Origin: *'); 
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 require __DIR__ . '/../../vendor/autoload.php';
-use Mike42\Escpos\ImagickEscposImage;#Butuh Ekstensi Imagick
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-use Mike42\Escpos\PrintConnectors\RawbtPrintConnector;
-use Mike42\Escpos\PrintConnectors\CupsPrintConnector;
 use Mike42\Escpos\Printer;
-use Mike42\Escpos\EscposImage;
 
 date_default_timezone_set("Asia/Jakarta");
 require __DIR__ . '/../../helper/Tanggal_helper.php';
