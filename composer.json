@@ -3,8 +3,5 @@
         "mike42/escpos-php": "^4.0",
         "lecodeurdudimanche/php-bluetooth": "^0.3.3",
         "picqer/php-barcode-generator": "^3.2"
-    },
-    "require-dev": {
-        "hoa/devtools": "^1.17"
     }
 }
